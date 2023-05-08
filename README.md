@@ -1,5 +1,5 @@
 # GetDeviceInfo
-该库用于python获取显卡的信息,列如英特尔,AMD和英伟达
+用于获取英特尔,英伟达,AMD显卡,硬件内存使用率等硬件信息
 通过pythonnet clr库加载.dll动态库
 通过FastApi 提供web接口访问
 通过psutil获取内存使用详情
