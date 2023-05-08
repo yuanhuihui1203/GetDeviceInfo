@@ -6,7 +6,7 @@ import yaml, os, sys
 import psutil
 from starlette.responses import JSONResponse
 
-sys.path.append(os.getcwd())
+# sys.path.append(os.getcwd()) 如果需要编译,在打开
 
 app = FastAPI(title="设备信息获取",
               description="用于获取windows下显卡，内存，cpu，网卡等使用情况",
@@ -23,7 +23,7 @@ class GetDeviceInfo:
         self.computer_tmp.IsCpuEnabled = True  # 获取CPU温度时用
         self.computer_tmp.IsGpuEnabled = True  # 获取GPU温度时用
         self.computer_tmp.IsMemoryEnabled = True  # 获取内存时用
-        # self.computer_tmp.IsNetworkEnabled = True  # 获取RAM温度时用
+        # self.computer_tmp.IsNetworkEnabled = True  # 获取网卡时用
         self.computer_tmp.Open()
 
     @staticmethod
@@ -69,9 +69,10 @@ class Router:
     routerApi = APIRouter()
 
     def __init__(self):
-        path = os.path.dirname(sys.executable)
-        self.device = GetDeviceInfo(path + "/lib/LibreHardwareMonitorLib")
-
+      # 如果编译成.exe时打开
+#         path = os.path.dirname(sys.executable)
+#         self.device = GetDeviceInfo(path + "/lib/LibreHardwareMonitorLib")
+        self.device = GetDeviceInfo("./LibreHardwareMonitorLib")
     async def get_device_info(self):
         return JSONResponse(
             status_code=200,
@@ -99,6 +100,6 @@ def init_service():
 
 init_service()
 if __name__ == '__main__':
-    with open("config/config.yaml", mode='r+', encoding='utf-8') as f:
+    with open("./config.yaml", mode='r+', encoding='utf-8') as f:
         data = yaml.load(f.read(), Loader=yaml.Loader)
     uvicorn.run("__main__:app", host=data['host'], port=data['port'])
